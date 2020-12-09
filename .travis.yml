@@ -1,36 +1,27 @@
 language: cpp
-
 sudo: required
-
 os:
 - linux
 - osx
 - windows
-
 dist: focal
-
 addons:
   apt:
     packages:
     - libudev-dev
-
 env:
   global:
-    # Supported Node versions: https://nodejs.org/en/about/releases/
   - PREBUILD_TARGETS="6.0.0 8.0.0 10.0.0 12.0.0 14.0.0"
-    # Supported Electron versions: https://electronjs.org/docs/tutorial/electron-timelines
-  - PREBUILD_ELECTRON_TARGETS="4.0.4 5.0.0 6.0.0 7.0.0 8.0.0 9.0.0"
+  - PREBUILD_ELECTRON_TARGETS="4.0.4 5.0.0 6.0.0 7.0.0 8.0.0 9.0.0 10.0.0 11.0.0"
   matrix:
   - ARCH="x64"
   - ARCH="ia32"
-
 matrix:
   exclude:
   - os: linux
     env: ARCH="ia32"
   - os: osx
     env: ARCH="ia32"
-
 before_install:
 - |
   if [ $TRAVIS_OS_NAME == windows ]; then
@@ -38,14 +29,12 @@ before_install:
     export PATH="/c/Program Files/nodejs:$PATH"
     export GYP_MSVS_VERSION=2015
   fi
-- $CXX --version
+- "$CXX --version"
 - node --version
 - npm update -g npm
 - npm --version
-
 install:
 - npm install
-
 script:
 - |
   for target in $PREBUILD_TARGETS; do
@@ -58,8 +47,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    # tm-rampart personal access token
-    secure: "ivZseBMz+0bsYcCFAXJ82mJIhmsRj4UN32bcggg+8ZYl8xzgC2P/kMGhPe8+4fDxo+lyxf4aJDKWozE0perMQKjjAOdri8MH2ufqGFRfkF0A3gJnOBcWMA6AP3ef0TE/HNF+NMluBCV+/VFPdsvZN08rnPauWzSBGy9SkeIJhY8="
+    secure: hQ9TlsILD295uqH/qaf6u4eDFCjNgLfNBZeuBU2FzcTcjQXleSb4nj6mBlkAE8AEgzur3PK7aURPpGKzrgetPeZ4uCXywHLn+4Uv54jQ6KJ+ZZ3UvUrHPqTZWSPxXNfplX0tDdwK02rysF5SahCRFjNYbXJp+g8nPH79Kb/J4gDfjhpQNGy+ptckliIe9BOeuMc7bVNIkDtKuG+1bF6rEMiEivk9pRyhNG8SUDQH+ltlPcp/EbL33nxXqZSSDhlajmY2pY6BfjercmaFOSP2uNA8Tlf8aOxL3iN/a1o6sCQyUSsx6cX28dqilNRUmWKSU8D5VNximwTzjcp5s85kd+cz+agaip4v5mgvo9kjHnm1MK2r/PqlvAvj0z6TJnBsOA/GjlpsfkEKTnAffeKg4ltYPbVnakBVCK74dunkvmgGcpKGTgT6jyg9lkRLSAOGEb/JBe8iVfVx4YZKL9b9Wfg1tJmLUzoaITskiaS0tCP5xYDgr6mYGR1U6XMr/CmWAVagqjyz3cm+U9RaKC+2LyB+fC5kN4gZqZRv+YxTKPkP6GvG4PON2P+JqUxcU7YUOnDGgBZjM/bnX5uLbHU3BJGfwXbLjtDg9tRyLwSkoXnJZJ0M1I5Zi0eH4OHujyZa5M9DQvyNA3W9s6J+d+21NvcZsnYtguknvNfkvimaYak=
   file_glob: true
   file: prebuilds/*
   skip_cleanup: true
